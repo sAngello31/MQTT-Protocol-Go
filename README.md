@@ -6,6 +6,9 @@
 - Bubble Library para la TUI del cliente
 
 ## Requerimientos Funcionales
+### Generales
+1. Generar Logs
+
 ### Client/Subscriber
 1. TUI para la interaccion con el usuario.
 2. Conexión al broker.
@@ -44,3 +47,55 @@ Por el momento unicamente tener un TUI que permita al usuario ver e interactuar 
 2. Trabajar en dos hilos distintos.
 3. Conectarse con el Gateway.
 4. Mandar mensajes a los topics correspondientes.
+
+
+### Arquitectura del proyecto
+mqtt-system/
+├── cmd/
+│   ├── broker/
+│   │   └── main.go
+│   ├── gateway/
+│   │   └── main.go
+│   ├── publisher/
+│   │   └── main.go
+│   └── subscriber/
+│       └── main.go
+│
+├── internal/
+│   ├── broker/
+│   │   ├── server.go        # Lógica del broker MQTT
+│   │   ├── client_manager.go
+│   │   └── message_store.go
+│   │
+│   ├── gateway/
+│   │   ├── load_balancer.go # Reenvía mensajes a brokers
+│   │   ├── routing.go
+│   │   └── metrics.go
+│   │
+│   ├── publisher/
+│   │   ├── client.go        # Conecta con gateway o broker
+│   │   └── message.go
+│   │
+│   ├── subscriber/
+│   │   ├── client.go
+│   │   └── handler.go
+│   │
+│   ├── mqtt/
+│   │   ├── protocol.go      # Parseo, encoding/decoding de paquetes MQTT
+│   │   └── utils.go
+│   │
+│   ├── network/
+│   │   ├── connection.go    # Conexión TCP y manejo de sockets
+│   │   └── pool.go          # Reuso de conexiones si aplica
+│   │
+│   └── common/
+│       ├── config.go        # Carga de configuración (YAML, JSON, ENV)
+│       ├── logger.go        # Logging centralizado
+│       └── constants.go
+│
+├── pkg/                     # Paquetes reutilizables opcionales
+│   ├── metrics/
+│   └── utils/
+│
+├── go.mod
+└── go.sum
