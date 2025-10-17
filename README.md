@@ -47,7 +47,8 @@ Por el momento unicamente tener un TUI que permita al usuario ver e interactuar 
 2. Trabajar en dos hilos distintos.
 3. Conectarse con el Gateway.
 4. Mandar mensajes a los topics correspondientes.
-
+5. Por el momento se debe generar el topic de los sensores de forma aleatoria.
+6. Por default se crearan dos sensores (Temperatura y Humedad). Pero el usuario puede indicar cuantos sensores desea generar con flags.
 
 ### Arquitectura del proyecto
 mqtt-system/
