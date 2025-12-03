@@ -23,10 +23,10 @@ func StartClient(sensorNumber int) {
 
 	// TODO: connection to the broker
 	dataChannel := make(chan []byte, 100) // TODO: Check if this size is the best way to do it
-	var wg sync.WaitGroup                 // It is just to wait for all the sensors to be generated and the main not die
+	var wg sync.WaitGroup
 
 	go services.Send(dataChannel)
-	for i := 0; i < sensorNumber; i++ {
+	for i := range sensorNumber {
 		wg.Add(1)
 		fmt.Println("Generating sensor: ", i+1)
 		go centralCommand(i+1, dataChannel, ctx, &wg)
