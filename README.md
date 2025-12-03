@@ -51,6 +51,7 @@ Por el momento unicamente tener un TUI que permita al usuario ver e interactuar 
 6. Por default se crearan dos sensores (Temperatura y Humedad). Pero el usuario puede indicar cuantos sensores desea generar con flags.
 
 ### Arquitectura del proyecto
+```
 mqtt-system/
 ├── cmd/
 │   ├── broker/
@@ -100,3 +101,4 @@ mqtt-system/
 │
 ├── go.mod
 └── go.sum
+```
