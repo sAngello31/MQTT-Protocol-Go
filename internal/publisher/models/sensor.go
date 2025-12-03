@@ -15,11 +15,11 @@ type SensorPayload struct {
 	Timestamp int64   `json:"timestamp"`
 }
 
-func NewSensor(sensorID string, value float64, unit string, topic string) *SensorPayload {
+func NewSensor(sensorID string, unit string, topic string) *SensorPayload {
 	return &SensorPayload{
 		SensorID:  sensorID,
 		Topic:     topic,
-		Value:     value,
+		Value:     0,
 		Unit:      unit,
 		Timestamp: time.Now().Unix(),
 	}
