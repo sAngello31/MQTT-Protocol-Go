@@ -18,13 +18,7 @@ var (
 func GenerateSensor() *models.SensorPayload {
 	id := generateSensorID()
 	topic, unit := generateTopic()
-	return &models.SensorPayload{
-		SensorID:  id,
-		Topic:     topic,
-		Value:     0,
-		Unit:      unit,
-		Timestamp: time.Now().Unix(),
-	}
+	return models.NewSensor(id, unit, topic)
 }
 
 func generateSensorID() string {

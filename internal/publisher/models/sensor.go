@@ -32,9 +32,9 @@ func (sensor *SensorPayload) GenerateValue() {
 	case "C":
 		sensor.Value = 18 + rand.Float64()*12 // 18–30 °C
 	case "%":
-		sensor.Value = 30 + rand.Float64()*60 // 30–90 % humedad
+		sensor.Value = 30 + rand.Float64()*60 // 30–90 %
 	default:
-		sensor.Value = rand.Float64() * 100 // fallback genérico
+		sensor.Value = rand.Float64() * 100 // generic fallback
 	}
 }
 
