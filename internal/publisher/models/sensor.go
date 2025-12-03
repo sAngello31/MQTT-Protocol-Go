@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/binary"
 	"encoding/json"
+	"math/rand/v2"
 	"time"
 )
 
@@ -22,6 +23,18 @@ func NewSensor(sensorID string, unit string, topic string) *SensorPayload {
 		Value:     0,
 		Unit:      unit,
 		Timestamp: time.Now().Unix(),
+	}
+}
+
+// Change it to make it more scalable lmao
+func (sensor *SensorPayload) GenerateValue() {
+	switch sensor.Unit {
+	case "C":
+		sensor.Value = 18 + rand.Float64()*12 // 18–30 °C
+	case "%":
+		sensor.Value = 30 + rand.Float64()*60 // 30–90 % humedad
+	default:
+		sensor.Value = rand.Float64() * 100 // fallback genérico
 	}
 }
 
