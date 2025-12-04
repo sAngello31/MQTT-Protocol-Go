@@ -6,6 +6,8 @@ import (
 	"encoding/json"
 	"math/rand/v2"
 	"time"
+
+	"github.com/sAngello31/MQTT-Protocol-Go/internal/publisher/interfaces"
 )
 
 type SensorPayload struct {
@@ -15,6 +17,8 @@ type SensorPayload struct {
 	Unit      string  `json:"unit"`
 	Timestamp int64   `json:"timestamp"`
 }
+
+var _ interfaces.Payload = (*SensorPayload)(nil)
 
 func NewSensor(sensorID string, unit string, topic string) *SensorPayload {
 	return &SensorPayload{

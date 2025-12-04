@@ -3,7 +3,6 @@
 
 ## Stack y Librerias
 - Go 1.22.2
-- Bubble Library para la TUI del cliente
 
 ## Requerimientos Funcionales
 ### Generales
@@ -35,12 +34,6 @@ Por el momento unicamente tener un TUI que permita al usuario ver e interactuar 
 3. Tabla de Suscripciones.
 4. Retained Messages - Para cuando un user se desconecta y tiene la flag retained, el broker mantiene el mensaje.
 5. Session Persistence (Si se implementa Qos > 0)
-
-### Gateway
-1. Conexión al broker.
-2. Suscripción a topics.
-3. Publicación de mensajes.
-4. Posiblemente agregar metadata (Esta por verse)
 
 ### Publisher
 1. Generar entre 1 a 2 sensores simulados (Temperatura y Humedad).
