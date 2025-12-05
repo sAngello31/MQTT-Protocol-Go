@@ -1,51 +1,54 @@
 # MQTT-Protocol-Go
 - Version 1.0
 
-## Stack y Librerias
+***This project is currently under development.***
+
+## Introduction
+This repository contains the implementation of an MQTT (Message Queuing Telemetry Transport) protocol in Go. It includes a broker, a publisher for simulating sensor data, and a subscriber client with a Text-based User Interface (TUI). The goal is to create a lightweight and functional MQTT system for IoT applications.
+
+## Stack and Libraries
 - Go 1.22.2
 
-## Requerimientos Funcionales
-### Generales
-1. Generar Logs
+## Functional Requirements
+### General
+1.  Generate Logs
 
 ### Client/Subscriber
-1. TUI para la interaccion con el usuario.
-2. Conexión al broker.
-3. Suscripción a topics.
-4. Publicación de mensajes.
-4.1. A tiempo real.
-4.2. Permitir un pipe para el guardado de mensajes en un archivo (Futuro).
+1.  TUI for user interaction.
+2.  Connection to the broker.
+3.  Subscription to topics.
+4.  Publication of messages.
+    4.1. In real-time.
+    4.2. Allow a pipe to save messages to a file (Future).
 
-Por el momento unicamente tener un TUI que permita al usuario ver e interactuar con el broker
+For now, the focus is on a TUI that allows the user to see and interact with the broker.
 
 ### Broker
-1. Leer el standar Oasis
-1.1. CONNECT/ CONNACK
-1.2. PUBLISH/ PUBACK
-1.3. SUBSCRIBE/ SUBACK
-1.4. UNSUBSCRIBE/ UNSUBACK
-1.5. DISCONNECT
-
-2. Calidad de Servicio (QoS)
-2.1. QoS 0: Fire and Forget
-2.2. QoS 1: PUBACK
-2.3. QoS 2: PUBREC, PUBREL, PUBCOMP - Para luego puesto que esto es medio complicado implementarlo.
-
-3. Tabla de Suscripciones.
-4. Retained Messages - Para cuando un user se desconecta y tiene la flag retained, el broker mantiene el mensaje.
-5. Session Persistence (Si se implementa Qos > 0)
+1.  Adhere to the Oasis standard.
+    1.1. CONNECT / CONNACK
+    1.2. PUBLISH / PUBACK
+    1.3. SUBSCRIBE / SUBACK
+    1.4. UNSUBSCRIBE / UNSUBACK
+    1.5. DISCONNECT
+2.  Quality of Service (QoS)
+    2.1. QoS 0: At most once (Fire and Forget).
+    2.2. QoS 1: At least once (Acknowledged delivery with PUBACK).
+    2.3. QoS 2: Exactly once (Assured delivery with PUBREC, PUBREL, PUBCOMP) - To be implemented later due to complexity.
+3.  Subscription Table.
+4.  Retained Messages: When a user with the retained flag disconnects, the broker stores the message.
+5.  Session Persistence (If QoS > 0 is implemented).
 
 ### Publisher
-1. Generar entre 1 a 2 sensores simulados (Temperatura y Humedad).
-2. Trabajar en dos hilos distintos.
-3. Conectarse con el Gateway.
-4. Mandar mensajes a los topics correspondientes.
-5. Por el momento se debe generar el topic de los sensores de forma aleatoria.
-6. Por default se crearan dos sensores (Temperatura y Humedad). Pero el usuario puede indicar cuantos sensores desea generar con flags.
+1.  Generate 1 to 2 simulated sensors (e.g., Temperature and Humidity).
+2.  Run in separate threads.
+3.  Connect to the Gateway.
+4.  Send messages to corresponding topics.
+5.  For now, sensor topics are generated randomly.
+6.  By default, two sensors (Temperature and Humidity) will be created. The user can specify the number of sensors to generate using flags.
 
-### Arquitectura del proyecto
+### Project Architecture
 ```
-mqtt-system/
+mqtt-protocol-go/
 ├── cmd/
 │   ├── broker/
 │   │   └── main.go
@@ -58,40 +61,42 @@ mqtt-system/
 │
 ├── internal/
 │   ├── broker/
-│   │   ├── server.go        # Lógica del broker MQTT
-│   │   ├── client_manager.go
-│   │   └── message_store.go
+│   │   ├── broker.go
+│   │   ├── services/
+│   │   │   └── publisher.go
+│   │   └── utils/
+│   │       └── os_signal.go
 │   │
-│   ├── gateway/
-│   │   ├── load_balancer.go # Reenvía mensajes a brokers
-│   │   ├── routing.go
-│   │   └── metrics.go
-│   │
-│   ├── publisher/
-│   │   ├── client.go        # Conecta con gateway o broker
-│   │   └── message.go
-│   │
-│   ├── subscriber/
-│   │   ├── client.go
-│   │   └── handler.go
+│   ├── common/
+│   │   └── flags/
+│   │       └── flags.go
 │   │
 │   ├── mqtt/
-│   │   ├── protocol.go      # Parseo, encoding/decoding de paquetes MQTT
-│   │   └── utils.go
+│   │   └── models/
+│   │       ├── mqtt_tree.go
+│   │       └── node.go
 │   │
 │   ├── network/
-│   │   ├── connection.go    # Conexión TCP y manejo de sockets
-│   │   └── pool.go          # Reuso de conexiones si aplica
+│   │   ├── client.go
+│   │   └── server.go
 │   │
-│   └── common/
-│       ├── config.go        # Carga de configuración (YAML, JSON, ENV)
-│       ├── logger.go        # Logging centralizado
-│       └── constants.go
+│   ├── publisher/
+│   │   ├── client.go
+│   │   ├── interfaces/
+│   │   │   └── payload.go
+│   │   ├── models/
+│   │   │   ├── publisher_packet.go
+│   │   │   └── sensor.go
+│   │   ├── services/
+│   │   │   ├── conn.go
+│   │   │   └── traffic_controller.go
+│   │   └── utils/
+│   │       ├── generator.go
+│   │       └── os_signal.go
+│   │
+│   └── subscriber/
 │
-├── pkg/                     # Paquetes reutilizables opcionales
-│   ├── metrics/
-│   └── utils/
-│
+├── pkg/
 ├── go.mod
-└── go.sum
+└── .gitignore
 ```
