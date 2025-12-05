@@ -14,7 +14,7 @@ import (
 	"github.com/sAngello31/MQTT-Protocol-Go/internal/network"
 )
 
-func StartBroker() {
+func StartBroker(port string) {
 	fmt.Println("Starting broker...")
 	ctx, cancel := context.WithCancel(context.Background())
 	signalChannel := make(chan os.Signal, 1)
@@ -23,7 +23,7 @@ func StartBroker() {
 
 	// Listeners
 	listeners := []*net.TCPListener{}
-	pubLn, err := network.StartPublisherListener()
+	pubLn, err := network.StartPublisherListener(port)
 	if err != nil {
 		panic(err)
 	}
@@ -33,6 +33,7 @@ func StartBroker() {
 
 	wg.Add(1)
 	go initPublisherListener(pubLn, &wg, ctx)
+	// TODO: Add subscriber listener
 
 	<-ctx.Done()
 	for _, ln := range listeners {

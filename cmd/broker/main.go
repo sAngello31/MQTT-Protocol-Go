@@ -1,7 +1,11 @@
 package main
 
-import "github.com/sAngello31/MQTT-Protocol-Go/internal/broker"
+import (
+	"github.com/sAngello31/MQTT-Protocol-Go/internal/broker"
+	"github.com/sAngello31/MQTT-Protocol-Go/internal/common/flags"
+)
 
 func main() {
-	broker.StartBroker()
+	BrokerFlags := flags.ParseBrokerFlags()
+	broker.StartBroker(BrokerFlags.PublisherPort)
 }

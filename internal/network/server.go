@@ -10,20 +10,22 @@ var (
 	SUBSCRIBER_PORT = ":8080"
 )
 
-func StartPublisherListener() (*net.TCPListener, error) {
-	ln, err := net.Listen("tcp", PUBLISHER_PORT)
+func StartPublisherListener(port string) (*net.TCPListener, error) {
+	fullPort := ":" + port
+	ln, err := net.Listen("tcp", fullPort)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Publisher listener started on: " + PUBLISHER_PORT)
+	fmt.Println("Publisher listener started on: " + fullPort)
 	return ln.(*net.TCPListener), nil
 }
 
-func StartSuscriberListener() (*net.TCPListener, error) {
-	ln, err := net.Listen("tcp", SUBSCRIBER_PORT)
+func StartSuscriberListener(port string) (*net.TCPListener, error) {
+	fullPort := ":" + port
+	ln, err := net.Listen("tcp", fullPort)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Suscriber listener started on: " + SUBSCRIBER_PORT)
+	fmt.Println("Suscriber listener started on: " + fullPort)
 	return ln.(*net.TCPListener), nil
 }
