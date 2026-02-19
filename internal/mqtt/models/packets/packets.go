@@ -1,13 +1,13 @@
 package packets
 
-var (
-	CONNECT    uint8 = 1
-	CONNACK    uint8 = 2
-	PUBLISH    uint8 = 3
-	PUBACK     uint8 = 4
-	SUBSCRIBE  uint8 = 8
-	SUBACK     uint8 = 9
-	PINGREQ    uint8 = 12
-	PINGRESP   uint8 = 13
-	DISCONNECT uint8 = 14
+const (
+	CONNECT    = 0x10
+	CONNACK    = 0x20
+	PUBLISH    = 0x30
+	PUBACK     = 0x40
+	SUBSCRIBE  = 0x80
+	SUBACK     = 0x90
+	PINGREQ    = 0xC0
+	PINGRESP   = 0xD0
+	DISCONNECT = 0xE0
 )
