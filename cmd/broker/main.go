@@ -6,6 +6,6 @@ import (
 )
 
 func main() {
-	BrokerFlags := flags.ParseBrokerFlags()
-	broker.StartBroker(BrokerFlags.PublisherPort, BrokerFlags.SubscriberPort)
+	bf := flags.ParseBrokerFlags()
+	broker.StartBroker(bf.Port)
 }

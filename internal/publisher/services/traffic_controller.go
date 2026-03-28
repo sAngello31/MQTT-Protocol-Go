@@ -1,11 +1,17 @@
 package services
 
-import "fmt"
+import (
+	"fmt"
+	"net"
+)
 
-func Send(dataChannel chan []byte) {
-
+func Send(conn net.Conn, dataChannel chan []byte) {
 	for packet := range dataChannel {
-		fmt.Println("Sending packet: ", packet)
-		fmt.Println("Packet was sent to the broker...")
+		// TODO: wrap packet in MQTT PUBLISH frame before sending
+		_, err := conn.Write(packet)
+		if err != nil {
+			fmt.Println("Error sending packet to broker:", err)
+			return
+		}
 	}
 }

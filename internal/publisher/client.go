@@ -13,7 +13,7 @@ import (
 	"github.com/sAngello31/MQTT-Protocol-Go/internal/publisher/utils"
 )
 
-func StartClient(sensorNumber int) {
+func StartClient(sensorNumber int, brokerAddr string) {
 	fmt.Println("Starting client simulation...")
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -21,14 +21,20 @@ func StartClient(sensorNumber int) {
 	signal.Notify(sigChannel, os.Interrupt, syscall.SIGTERM)
 	go utils.TurnOffSimulation(sigChannel, cancel)
 
-	// TODO: connection to the broker
-	dataChannel := make(chan []byte, 100) // TODO: Check if this size is the best way to do it
+	conn, err := services.Connect(brokerAddr)
+	if err != nil {
+		fmt.Println("Error connecting to broker:", err)
+		return
+	}
+	defer conn.Close()
+
+	dataChannel := make(chan []byte, 100)
 	var wg sync.WaitGroup
 
-	go services.Send(dataChannel)
+	go services.Send(conn, dataChannel)
 	for i := range sensorNumber {
 		wg.Add(1)
-		fmt.Println("Generating sensor: ", i+1)
+		fmt.Println("Generating sensor:", i+1)
 		go centralCommand(i+1, dataChannel, ctx, &wg)
 	}
 	wg.Wait()
@@ -45,19 +51,19 @@ func centralCommand(id int, dataChannel chan []byte, ctx context.Context, wg *sy
 	for {
 		select {
 		case <-ctx.Done():
-			fmt.Println("Sensor ", id, " is done...")
+			fmt.Println("Sensor", id, "is done...")
 			return
 		case <-ticker.C:
 			sensor.GenerateValue()
 			payload, err := sensor.EncodeBinary()
 			if err != nil {
-				fmt.Println("Error encoding sensor: ", err)
+				fmt.Println("Error encoding sensor:", err)
 				return
 			}
 			select {
 			case dataChannel <- payload:
 			case <-ctx.Done():
-				fmt.Println("Sensor with goroutine ", id, " is done...")
+				fmt.Println("Sensor", id, "is done...")
 				return
 			}
 		}

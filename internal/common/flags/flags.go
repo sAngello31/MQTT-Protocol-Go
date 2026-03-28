@@ -2,26 +2,37 @@ package flags
 
 import "flag"
 
+type BrokerFlags struct {
+	Port string
+}
+
 type PublisherFlags struct {
 	SensorNumber int
+	BrokerAddr   string
 }
 
-type BrokerFlags struct {
-	PublisherPort  string
-	SubscriberPort string
-}
-
-func ParsePublisherFlags() *PublisherFlags {
-	csf := &PublisherFlags{}
-	flag.IntVar(&csf.SensorNumber, "s", 2, "Number of sensors that the publisher will generate")
-	flag.Parse()
-	return csf
+type SubscriberFlags struct {
+	BrokerAddr string
 }
 
 func ParseBrokerFlags() *BrokerFlags {
 	bf := &BrokerFlags{}
-	flag.StringVar(&bf.PublisherPort, "p", "3000", "Publisher port of the broker")
-	flag.StringVar(&bf.SubscriberPort, "sub", "8080", "Subscriber port of the broker")
+	flag.StringVar(&bf.Port, "p", "1883", "Broker TCP port")
 	flag.Parse()
 	return bf
+}
+
+func ParsePublisherFlags() *PublisherFlags {
+	pf := &PublisherFlags{}
+	flag.IntVar(&pf.SensorNumber, "s", 2, "Number of sensors the publisher will simulate")
+	flag.StringVar(&pf.BrokerAddr, "b", "localhost:1883", "Broker address (host:port)")
+	flag.Parse()
+	return pf
+}
+
+func ParseSubscriberFlags() *SubscriberFlags {
+	sf := &SubscriberFlags{}
+	flag.StringVar(&sf.BrokerAddr, "b", "localhost:1883", "Broker address (host:port)")
+	flag.Parse()
+	return sf
 }

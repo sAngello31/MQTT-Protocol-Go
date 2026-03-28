@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	publisherFlags := flags.ParsePublisherFlags()
-	fmt.Println("Publisher started with", publisherFlags.SensorNumber, "sensors")
-	publisher.StartClient(publisherFlags.SensorNumber)
+	pf := flags.ParsePublisherFlags()
+	fmt.Printf("Publisher started with %d sensors → broker at %s\n", pf.SensorNumber, pf.BrokerAddr)
+	publisher.StartClient(pf.SensorNumber, pf.BrokerAddr)
 }
